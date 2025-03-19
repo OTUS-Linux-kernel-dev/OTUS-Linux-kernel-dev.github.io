@@ -47,14 +47,34 @@
                 <li class="toctree-l1 current"><a class="reference internal current" href="#">How to install and run a virtual machine</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#1">Шаг 1: Разархивирование Архива</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_1">Разархивируйте архив</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#2-qemu-virt-manager">Шаг 2: Установка QEMU и Virt-Manager</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#qemu-virt-manager_1">Установите QEMU и Virt-Manager</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#libvirt">Запустите службу libvirt</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#3-virt-manager">Шаг 3: Создание Виртуальной Машины с Virt-Manager</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#virt-manager">Запустите Virt-Manager</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_2">Создайте новую виртуальную машину</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#4">Шаг 4: Запуск Виртуальной Машины</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_3">Запустите виртуальную машину</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#qemu">Альтернативный Метод: Запуск с помощью QEMU</a>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#qemu">Альтернативный Метод: Запуск с помощью QEMU (Не рекомендую)</a>
     </li>
     </ul>
                 </li>
@@ -82,73 +102,46 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h2 id="qemu-virt-manager">Создание Виртуальной Машины с помощью QEMU и Virt-Manager</h2>
-<h3 id="1">Шаг 1: Разархивирование Архива</h3>
-<ol>
-<li><strong>Установка необходимых инструментов</strong>:<ul>
-<li>Убедитесь, что у вас установлены <code>tar</code> и <code>xz</code> для разархивирования архива. Обычно они уже установлены в большинстве дистрибутивов Linux.</li>
-</ul>
-</li>
-<li><strong>Разархивируйте архив</strong>:</li>
-</ol>
-<pre><code class="language-bash">tar -xvf vm_image.tar.xz
+                <h1 id="qemu-virt-manager">Создание Виртуальной Машины с помощью QEMU и Virt-Manager</h1>
+<h2 id="1">Шаг 1: Разархивирование Архива</h2>
+<h3 id="_1">Разархивируйте архив</h3>
+<p>Убедитесь, что у вас установлены <code>tar</code> и <code>xz</code> для разархивирования архива. Обычно они уже установлены в большинстве дистрибутивов Linux.</p>
+<pre><code class="language-sh">tar -xvf vm_image.tar.xz
 </code></pre>
-<p>Это распакует содержимое архива в текущую директорию.</p>
-<h3 id="2-qemu-virt-manager">Шаг 2: Установка QEMU и Virt-Manager</h3>
-<ol>
-<li><strong>Установите QEMU и Virt-Manager</strong>:<ul>
-<li><strong>Для дистрибутивов на основе Debian/Ubuntu</strong>:</li>
-</ul>
-</li>
-</ol>
-<pre><code class="language-bash">sudo apt update
+<h2 id="2-qemu-virt-manager">Шаг 2: Установка QEMU и Virt-Manager</h2>
+<h3 id="qemu-virt-manager_1">Установите QEMU и Virt-Manager</h3>
+<p>Для дистрибутивов на основе Debian/Ubuntu:</p>
+<pre><code class="language-sh">sudo apt update
 sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients virt-manager
 </code></pre>
-<pre><code>- **Для дистрибутивов на основе Fedora/CentOS/RHEL**:
+<p>Для дистрибутивов на основе Fedora/CentOS/RHEL:</p>
+<pre><code class="language-sh">sudo dnf install qemu-kvm libvirt virt-manager
 </code></pre>
-<pre><code class="language-bash">sudo dnf install qemu-kvm libvirt virt-manager
-</code></pre>
-<ol>
-<li><strong>Запустите службу libvirt</strong>:</li>
-</ol>
-<pre><code class="language-bash">sudo systemctl start libvirtd
+<h3 id="libvirt">Запустите службу libvirt</h3>
+<pre><code class="language-sh">sudo systemctl start libvirtd
 sudo systemctl enable libvirtd
 </code></pre>
-<h3 id="3-virt-manager">Шаг 3: Создание Виртуальной Машины с Virt-Manager</h3>
-<ol>
-<li><strong>Запустите Virt-Manager</strong>:<ul>
-<li>Вы можете запустить Virt-Manager из меню приложений или командной строки:</li>
-</ul>
-</li>
-</ol>
-<pre><code class="language-bash">virt-manager
+<h2 id="3-virt-manager">Шаг 3: Создание Виртуальной Машины с Virt-Manager</h2>
+<h3 id="virt-manager">Запустите Virt-Manager</h3>
+<p>Вы можете запустить <code>virt-manager</code> из меню приложений или командной строки:</p>
+<pre><code class="language-sh">virt-manager
 </code></pre>
-<ol>
-<li><strong>Создайте новую виртуальную машину</strong>:<ul>
-<li>В интерфейсе Virt-Manager нажмите на кнопку "Создать виртуальную машину".</li>
-<li>Выберите "Импорт образа диска" и нажмите "Далее".</li>
-<li>Укажите путь к файлу "little_virt.qcow2" нажав кнопку «Обзор», а затем «Выбрать файл».</li>
-<li>Выберите «Debian 11» или другой наиболее близкий к Debian 12 вариант в выпадающем списке.</li>
-<li>Нажмите "Далее".</li>
-<li>Настройте параметры виртуальной машины, такие как количество ядер процессора и объем оперативной памяти.</li>
-<li>Нажмите "Далее", затем "Готово".</li>
-</ul>
-</li>
-</ol>
-<h3 id="4">Шаг 4: Запуск Виртуальной Машины</h3>
-<ol>
-<li><strong>Запустите виртуальную машину</strong>:<ul>
-<li>В списке виртуальных машин в Virt-Manager выберите созданную машину и нажмите кнопку "Запустить".</li>
-<li>Виртуальная машина должна запуститься и отобразить экран загрузки.</li>
-</ul>
-</li>
-</ol>
-<h3 id="qemu">Альтернативный Метод: Запуск с помощью QEMU</h3>
+<h3 id="_2">Создайте новую виртуальную машину</h3>
+<p>В интерфейсе <code>virt-manager</code> нажмите на кнопку "Создать виртуальную машину".</p>
+<p>Выберите "Импорт образа диска" и нажмите "Далее".</p>
+<p>Укажите путь к файлу <code>little_virt.qcow2</code> нажав кнопку «Обзор», а затем «Выбрать файл».</p>
+<p>Выберите <code>Debian 11</code> или другой наиболее близкий к <code>Debian 12</code> вариант в выпадающем списке.</p>
+<p>Нажмите "Далее".</p>
+<p>Настройте параметры виртуальной машины, такие как количество ядер процессора и объем оперативной памяти.</p>
+<p>Нажмите "Далее", затем "Готово".</p>
+<h2 id="4">Шаг 4: Запуск Виртуальной Машины</h2>
+<h3 id="_3">Запустите виртуальную машину</h3>
+<p>В списке виртуальных машин в <code>virt-manager</code> выберите созданную машину и нажмите кнопку "Запустить". Виртуальная машина должна запуститься и отобразить экран загрузки.</p>
+<h2 id="qemu">Альтернативный Метод: Запуск с помощью QEMU (Не рекомендую)</h2>
 <p>Если вы предпочитаете запускать виртуальную машину напрямую с помощью <code>qemu</code>, вы можете сделать это следующим образом:</p>
-<pre><code class="language-bash">qemu-system-x86_64 -enable-kvm -m 2048 -vnc :0 -device virtio-blk-device,drive=hd0 -drive if=none,id=hd0,file=little_virt.qcow2,format=qcow2
+<pre><code class="language-sh">qemu-system-x86_64 -enable-kvm -m 2048 -vnc :0 -device virtio-blk-device,drive=hd0 -drive if=none,id=hd0,file=little_virt.qcow2,format=qcow2
 </code></pre>
 <p>Эта команда запускает виртуальную машину с поддержкой KVM, 2048 МБ оперативной памяти и подключением к диску через VNC.</p>
-<div style="text-align: center">⁂</div>
               
             </div>
           </div><footer>
