@@ -46,9 +46,15 @@
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="#">How to install and run a virtual machine</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#0">Шаг 0: Скачивание Архива</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_1">Скачайте архив</a>
+    </li>
+        </ul>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#1">Шаг 1: Разархивирование Архива</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#_1">Разархивируйте архив</a>
+    <li class="toctree-l3"><a class="reference internal" href="#_2">Разархивируйте архив</a>
     </li>
         </ul>
     </li>
@@ -64,13 +70,13 @@
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#virt-manager">Запустите Virt-Manager</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#_2">Создайте новую виртуальную машину</a>
+    <li class="toctree-l3"><a class="reference internal" href="#_3">Создайте новую виртуальную машину</a>
     </li>
         </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#4">Шаг 4: Запуск Виртуальной Машины</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#_3">Запустите виртуальную машину</a>
+    <li class="toctree-l3"><a class="reference internal" href="#_4">Запустите виртуальную машину</a>
     </li>
         </ul>
     </li>
@@ -103,10 +109,13 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="qemu-virt-manager">Создание Виртуальной Машины с помощью QEMU и Virt-Manager</h1>
+<h2 id="0">Шаг 0: Скачивание Архива</h2>
+<h3 id="_1">Скачайте архив</h3>
+<p>Перейдите по <a href="https://drive.google.com/drive/folders/1wV2kxfPkK-ebPbnXGilh1UGJj0AE4Zhw">ссылке</a> и скачайте архив.</p>
 <h2 id="1">Шаг 1: Разархивирование Архива</h2>
-<h3 id="_1">Разархивируйте архив</h3>
+<h3 id="_2">Разархивируйте архив</h3>
 <p>Убедитесь, что у вас установлены <code>tar</code> и <code>xz</code> для разархивирования архива. Обычно они уже установлены в большинстве дистрибутивов Linux.</p>
-<pre><code class="language-sh">tar -xvf vm_image.tar.xz
+<pre><code class="language-sh">tar -xvf debian_12_6.1.130.tar.xz
 </code></pre>
 <h2 id="2-qemu-virt-manager">Шаг 2: Установка QEMU и Virt-Manager</h2>
 <h3 id="qemu-virt-manager_1">Установите QEMU и Virt-Manager</h3>
@@ -126,7 +135,7 @@ sudo systemctl enable libvirtd
 <p>Вы можете запустить <code>virt-manager</code> из меню приложений или командной строки:</p>
 <pre><code class="language-sh">virt-manager
 </code></pre>
-<h3 id="_2">Создайте новую виртуальную машину</h3>
+<h3 id="_3">Создайте новую виртуальную машину</h3>
 <p>В интерфейсе <code>virt-manager</code> нажмите на кнопку "Создать виртуальную машину".</p>
 <p>Выберите "Импорт образа диска" и нажмите "Далее".</p>
 <p>Укажите путь к файлу <code>little_virt.qcow2</code> нажав кнопку «Обзор», а затем «Выбрать файл».</p>
@@ -135,7 +144,7 @@ sudo systemctl enable libvirtd
 <p>Настройте параметры виртуальной машины, такие как количество ядер процессора и объем оперативной памяти.</p>
 <p>Нажмите "Далее", затем "Готово".</p>
 <h2 id="4">Шаг 4: Запуск Виртуальной Машины</h2>
-<h3 id="_3">Запустите виртуальную машину</h3>
+<h3 id="_4">Запустите виртуальную машину</h3>
 <p>В списке виртуальных машин в <code>virt-manager</code> выберите созданную машину и нажмите кнопку "Запустить". Виртуальная машина должна запуститься и отобразить экран загрузки.</p>
 <h2 id="qemu">Альтернативный Метод: Запуск с помощью QEMU (Не рекомендую)</h2>
 <p>Если вы предпочитаете запускать виртуальную машину напрямую с помощью <code>qemu</code>, вы можете сделать это следующим образом:</p>
