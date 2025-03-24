@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Module 1(Building a Linux Kernel) - OTUS-linux-kernel-dev</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module 1(Building a Linux Kernel)";
+        var mkdocs_page_input_path = "build_kernel.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> OTUS-linux-kernel-dev
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../install_vm/">How to install and run a virtual machine</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Module 1(Building a Linux Kernel)</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#0">Шаг 0: Материалы для сборки ядра</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_2">Подготовка исходников</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#1">Шаг 1: Настройка конфигурации</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_3">Автоматическая минимизация</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2">Шаг 2: Ручная корректировка</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#config">Редактирование .config файла</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3">Шаг 3: Компиляция и установка</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#deb">Компиляция ядра и его сборка в *.deb пакеты</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#deb-">Установка deb-пакетов ядра</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_4">Особенности сборки ядра на виртуальной машине</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#chroot">Альтернативный Метод: Сборка локально через chroot</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#0-chroot">Шаг 0: Подготовка окружения chroot</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_5">Создать корневую директорию для сборки на хосте</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_6">Перенос исходного кода ядра из ВМ</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#chroot_1">Подготовка окружения для перехода в chroot</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#1-chroot">Шаг 1: Переход в chroot</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#chroot_2">Переход в окружение chroot</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_7">Установка зависимостей для сборки ядра</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#_8">Далее сборка аналогична инструкции для виртуальной машины</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">OTUS-linux-kernel-dev</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module 1(Building a Linux Kernel)</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="_1">Компиляция и настройка ядра</h1>
+<h2 id="0">Шаг 0: Материалы для сборки ядра</h2>
+<h3 id="_2">Подготовка исходников</h3>
+<p>На предоставленной виртуальной машине уже есть директория <code>/usr/src/linux-6.1.130</code> с исходным кодом ядра.
+Перейдите в указанную директорию или скачайте архив ядра по <a href="https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.1.130.tar.xz">ссылке</a>.</p>
+<blockquote>
+<p>Убедитесь, что все необходимые для сборки пакеты у вас установленны</p>
+</blockquote>
+<h2 id="1">Шаг 1: Настройка конфигурации</h2>
+<h3 id="_3">Автоматическая минимизация</h3>
+<p>При сборке ядра можно и нужно использовать цели из <code>Makefile</code> в исходниках ядра. Ниже представлен список целей которые есть в <code>Makefile</code>.</p>
+<pre><code class="language-sh">make defconfig        #создаёт базовую конфигурацию для конкретной платформы
+make localmodconfig   #автоматически создаёт конфигурацию на основе текущих загруженных модулей
+make olddefconfig     #обновляет существующую конфигурацию до новой версии ядра
+make oldconfig        #интерактивное обновление конфигурации с запросом новых опций
+make silentoldconfig  #то же самое, что и oldconfig, но без вывода лишней информации
+</code></pre>
+<p>Когда мы устанавливаем стандартное ядро Linux, оно включает в себя множество драйверов - это как большой набор ключей, где каждый ключ предназначен для работы с определённым устройством или оборудованием. Но у каждого компьютера своё конкретное оборудование, поэтому большая часть этих драйверов просто не нужна.</p>
+<p>Цель <code>localmodconfig</code> помогает нам создать более лёгкое ядро, оставив только те драйверы, которые действительно используются в нашей системе. Это похоже на то, как если бы вы убрали из ключей все лишние, которые никогда не используете - сумка станет легче и порядок лучше.</p>
+<p>Почему это важно для сборки ядра? Когда мы компилируем ядро с большим количеством ненужных драйверов, процесс сборки занимает больше времени и требует больше ресурсов компьютера. Это как если бы вы пытались собрать мебель по инструкции, которая включает детали для всех возможных модификаций продукта - просто излишне.</p>
+<p>Используя <code>localmodconfig</code>, мы создаём более чистую конфигурацию ядра, где есть только то, что действительно нужно нашей системе. Это делает процесс сборки быстрее и эффективнее, так как компилятору не приходится обрабатывать код всех лишних драйверов.</p>
+<pre><code class="language-sh">make localmodconfig
+</code></pre>
+<h2 id="2">Шаг 2: Ручная корректировка</h2>
+<p>Для учебных целей мы отключаем механизмы обязательного контроля доступа (MAC), так как они не требуется в тестовой среде виртуальной машины.</p>
+<pre><code class="language-sh">CONFIG_SECURITY_SELINUX
+CONFIG_SECURITY_SMACK
+CONFIG_SECURITY_TOMOYO
+CONFIG_SECURITY_APPARMOR
+CONFIG_SECURITY_YAMA
+</code></pre>
+<p>В будущих занятиях мы планируем освоить работу с <code>kgdb</code>, что потребует предварительного отключения <code>KASLR</code>.</p>
+<pre><code class="language-sh">CONFIG_RANDOMIZE_BASE
+</code></pre>
+<p>Чтобы увеличить производительность системы имеет смысл отключить защитные механизмы для процессоров и защитные механизмы для таблицы страниц.</p>
+<pre><code class="language-sh">CONFIG_CPU_MITIGATIONS
+CONFIG_MITIGATION_SPECTRE_BHI
+CONFIG_MITIGATION_RFDS
+
+CONFIG_PAGE_TABLE_ISOLATION
+</code></pre>
+<p><code>ZSWAP</code> можно отключить, так как этот механизм в основном предназначен для мобильных устройств. Его основная функция заключается в том, что при нехватке оперативной памяти он сжимает страницы памяти и хранит их в специальной области ОЗУ вместо записи на диск, что обеспечивает более быстрый доступ к этим данным.</p>
+<pre><code class="language-sh">CONFIG_ZSWAP
+</code></pre>
+<p>Поскольку мы не планируем использовать <code>BPF</code> в нашей курсе, его можно безопасно отключить.</p>
+<pre><code class="language-sh">CONFIG_BPF
+CONFIG_BPF_SYSCALL
+CONFIG_BPF_JIT
+CONFIG_BPF_EVENTS
+CONFIG_BPFILTER
+</code></pre>
+<p>В процессе выполнения домашних заданий по разработке и отладке ядра Linux требуется настройка специальных инструментов отладки. Для эффективной диагностики проблем и анализа поведения кода необходимо включить соответствующие отладочные опции в конфигурации ядра.</p>
+<pre><code class="language-sh"># поддержка debugfs
+CONFIG_DEBUG_FS=y
+
+# поддержка ftrace
+CONFIG_FTRACE=y
+CONFIG_FUNCTION_TRACER=y
+CONFIG_DYNAMIC_FTRACE=y
+CONFIG_FUNCTION_GRAPH_TRACER=y
+CONFIG_STACK_TRACER=y
+
+# поддержка KUnit
+CONFIG_KUNIT=y
+CONFIG_KUNIT_TEST=y
+
+# поддержка KASAN
+CONFIG_KASAN=y
+CONFIG_STACKTRACE=y
+CONFIG_KASAN_GENERIC=y
+CONFIG_KASAN_INLINE=y
+CONFIG_KASAN_EXTRA_INFO=y
+
+# поддержка KGDB
+CONFIG_KGDB=y
+CONFIG_KGDB_SERIAL_CONSOLE=y
+CONFIG_DEBUG_INFO=y
+CONFIG_SERIAL_CONSOLE=y
+CONFIG_CONSOLE_POLL=y
+
+# поддержка Kprobe:
+CONFIG_KPROBES=y
+CONFIG_KPROBE_EVENT=y
+</code></pre>
+<h3 id="config">Редактирование .config файла</h3>
+<p>Поправить <code>.config</code> файл можно 2-я способами:</p>
+<pre><code class="language-sh"># псевдографический интерфейс
+make menuconfig
+</code></pre>
+<p>или же прямое редактирование <code>.config</code> файла</p>
+<pre><code class="language-sh">vim .config
+</code></pre>
+<p>Оба метода настройки конфигурации ядра имеют свои ограничения. В интерфейсе <code>menuconfig</code> сложно отыскать нужную опцию для её отключения, а при использовании <code>vim</code> прямое отключение параметров может оказаться невозможным из-за того, что некоторые настройки <code>CONFIG_*</code> автоматически включаются другими параметрами конфигурации.</p>
+<h2 id="3">Шаг 3: Компиляция и установка</h2>
+<h3 id="deb">Компиляция ядра и его сборка в *.deb пакеты</h3>
+<p>Компиляция ядра может быть выполнена двумя основными методами: распределённой компиляцией между несколькими компьютерами или локальной компиляцией с использованием всех доступных ядер одного процессора. В нашем случае мы будем использовать второй подход, который предполагает эффективное распределение задачи по всем ядрам процессора на единственном компьютере.</p>
+<pre><code class="language-sh">make -j$(nproc) deb-pkg 2&gt;error.log
+</code></pre>
+<p>Для отладки процесса сборки ядра важно правильно организовать логирование ошибок. Когда процесс компиляции завершается с ошибкой, все сообщения об ошибках направляются в поток стандартных ошибок (<code>stderr</code>). Чтобы сохранить эти важные данные для последующего анализа, можно перенаправить <code>stderr</code> в файл <code>error.log</code>.</p>
+<h3 id="deb-">Установка deb-пакетов ядра</h3>
+<p>В <code>/usr/src/</code> появятся <code>*.deb</code> пакеты, их можно установить используя <code>dpkg</code>.</p>
+<pre><code class="language-sh">dpkg -i linux-image-6.1.130_*_amd64.deb
+dpkg -i linux-headers-6.1.130_*_amd64.deb
+dpkg -i linux-libc-6.1.130_*_amd64.deb
+
+reboot
+</code></pre>
+<h3 id="_4">Особенности сборки ядра на виртуальной машине</h3>
+<p>Основным недостатком сборки ядра в среде виртуальной машины является существенное увеличение времени компиляции по сравнению со сборкой непосредственно на физической машине. Это происходит потому, что виртуальная машина добавляет дополнительный уровень абстракции между процессом сборки и аппаратным обеспечением, что приводит к замедлению выполнения операций. В связи с этим ниже представлен более эффективный подход к сборке ядра, который позволяет значительно сократить время компиляции.</p>
+<h2 id="chroot">Альтернативный Метод: Сборка локально через chroot</h2>
+<p>Использование <code>chroot</code> для сборки ядра Linux обеспечивает создание изолированного окружения непосредственно на локальной машине разработчика, что существенно ускоряет процесс компиляции за счет прямого доступа к аппаратным ресурсам без дополнительных слоев виртуализации.</p>
+<h2 id="0-chroot">Шаг 0: Подготовка окружения chroot</h2>
+<h3 id="_5">Создать корневую директорию для сборки на хосте</h3>
+<pre><code class="language-sh">mkdir -p /home/dir_chroot
+</code></pre>
+<h3 id="_6">Перенос исходного кода ядра из ВМ</h3>
+<p>Скопируйте исходники ядра из виртуальной машины в <code>/home/dir_chroot</code></p>
+<pre><code class="language-sh">scp -r linux-* &lt;ваш пользователь&gt;@&lt;ваш ip&gt;:.
+
+# пример использования scp, копируем linux-6.1.130 в home директорию пользователя host c ip 192.168.122.1
+scp -r linux-6.1.130 host@192.168.122.1:.
+
+</code></pre>
+<h3 id="chroot_1">Подготовка окружения для перехода в chroot</h3>
+<p>Для инициализации окружения <code>chroot</code> рекомендуется использовать предварительно подготовленный скрипт. Можете разобрать его построчно самостоятельно.</p>
+<pre><code class="language-sh">#!/bin/bash
+
+chr=&quot;/home/dir_chroot&quot;
+sudo debootstrap \
+    --include ncurses-term,mc,locales,nano,gawk,lsb-release,acl \
+    --components=main,contrib,non-free \ #дополните флаги репозитория
+    ${chr} \
+    # укажите репозиторий откуда будут скачиваться пакеты
+
+cp /etc/resolv.conf ${chr}/etc/resolv.conf
+echo &quot;cp /etc/resolv.conf ${chr}/etc/resolv.conf&quot;
+
+cd ${chr}
+mount proc -t proc ./proc
+echo &quot;proc&quot;
+mount sys -t sysfs ./sys
+echo &quot;sys&quot;
+mount --bind /dev ./dev
+echo &quot;dev&quot;
+</code></pre>
+<h2 id="1-chroot">Шаг 1: Переход в chroot</h2>
+<h3 id="chroot_2">Переход в окружение chroot</h3>
+<pre><code class="language-sh">cd /home/dir_chroot
+chroot .
+</code></pre>
+<p>После выполнения этих команд система начинает считать текущую директорию новым корневым каталогом <code>/</code>.</p>
+<h3 id="_7">Установка зависимостей для сборки ядра</h3>
+<p>Установим минимальный набор пакетов для сборки ядра, остальные пакеты можно доустановить выполняя команду <code>make -j$(nproc) deb-pkg</code> </p>
+<pre><code class="language-sh">apt install -y build-essential libncurses-dev bison flex libssl-dev bc
+</code></pre>
+<h4 id="_8">Далее сборка аналогична инструкции для виртуальной машины</h4>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../install_vm/" class="btn btn-neutral float-left" title="How to install and run a virtual machine"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../install_vm/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
